@@ -4,13 +4,38 @@
 using namespace std;
 
 int main() {
-    // Resources available for delivery
-    int trucks = 5;        // number of trucks 
-    int supplyPacks = 120; // food and other supplies
-    int helicopters = 2;
-    int boats = 3;
-    int ambulances = 4;
-    int police = 3;
+    //initialize resources
+    int trucks;        // number of trucks 
+    int supplyPacks; // food and other supplies
+    int helicopters;
+    int boats;
+    int ambulances;
+    int police;
+    string mode; //not resource
+    cout << "WHICH MODE OF RESOURCES WOULD YOU LIKE TO BEGIN WITH (sufficient or insufficient): "; // user enters sufficient or insufficient
+    cin >> mode;
+    //counters for summary at the end
+    int successfulrequests = 0;
+    int deferredrequests = 0;
+
+    if (mode == "sufficient")
+    {
+    // sufficient resources
+       trucks = 5;        
+       supplyPacks = 120; 
+       helicopters = 2;
+       boats = 3;
+       ambulances = 4;
+       police = 3;
+    }
+    else{
+      //insufficient resources
+        trucks = 1;         
+       supplyPacks = 10; 
+       helicopters = 1;
+       boats = 0;
+       ambulances = 1;
+       police = 1;}
 
     //Request Details
     string damage;                    // Low, Medium, High
@@ -19,14 +44,6 @@ int main() {
     bool floodWarning;         // true = Yes, false = No
     bool medicalNeed;          // true = Yes, false = No
     bool previousAid;                 // true = Yes, false = No
-
-    cout << "-----ALL RESOURCES---------" << endl;
-    cout << "Trucks: \t" << trucks << endl;
-    cout << "Supply Packs: \t" << supplyPacks << endl;
-    cout << "Helicopters \t" << helicopters << endl;
-    cout << "Boats:      \t" << boats << endl;
-    cout << "Ambulances: \t" << ambulances << endl;
-    cout << "police: \t" << police << endl;
 
     string request = "request";
 
@@ -40,14 +57,14 @@ int main() {
         //tkae input request details
         cout << "Enter damage level (Low,Medium,High):              ";
         cin >> damage;
-        transform(damage.begin(), damage.end(), damage.begin(), ::tolower);
+        transform(damage.begin(), damage.end(), damage.begin(), ::tolower);//for converting input to lowercase
 
         cout << "Enter number of families affected (10 to 200):     ";
         cin >> familiesAffected;
 
         cout << "Enter access route status (Open, Damaged, Closed): ";
         cin >> accessRoute;
-        transform(accessRoute.begin(), accessRoute.end(), accessRoute.begin(), ::tolower);
+        transform(accessRoute.begin(), accessRoute.end(), accessRoute.begin(), ::tolower);//for converting input to lowercase
 
         cout << "Is there a flood warning? (true/false):            ";
         cin >> boolalpha >> floodWarning;
@@ -82,7 +99,7 @@ int main() {
             familiesScore = 10;       // 51-100
         }
         else if (familiesAffected < 150) {
-            familiesScore = 15;       // 101-150
+            familiesScore = 15;       // 101-149
         }
         else {
             familiesScore = 20;       // 150+
@@ -112,15 +129,19 @@ int main() {
         if (needScore >= 80)
         {
             action = 'A';
+            successfulrequest++
         }
         else if (needScore >= 60) {
             action = 'B';
+            successfulrequest++
         }
         else if (needScore >= 30) {
             action = 'C';
+            successfulrequest++
         }
         else {
             action = 'D';
+            deferredrequest++
         }
 
         while (true)
@@ -132,10 +153,13 @@ int main() {
                 actionName = "Full Relief";
                 needTrucks = 2;
                 needPacks = 50;
-                needHelicopters = 1;
                 needBoats = 1;
                 needAmbulances = 2;
-                needpolice = 2;
+                
+                if (needScore >= 80 && accessRoute == "Damaged")
+                {needHelicopters = 1;}
+                else{
+                      needHelicopters = 0;}
                 break;
             case 'B':
                 actionName = "Standard Relief";
@@ -178,6 +202,13 @@ int main() {
                 // Perform the selected action
                 cout << "\n----- Relief Action Details -----" << endl;
                 cout << "\nSelected Action: " << actionName << endl;
+                cout << "\n----- REQUEST DETAILS -----" << endl;
+                cout << "Damage Level:          " << damage << endl;
+                cout << "Families Affected:     " << familiesAffected << endl;
+                cout << "Access Route:          " << accessRoute << endl;
+                cout << "Flood Warning:         " << (floodWarning ? "Yes" : "No") << endl;
+                cout << "Medical Need:          " << (medicalNeed ? "Yes" : "No") << endl;
+                cout << "Previous Aid Received: " << (previousAid ? "Yes" : "No") << endl;
 
                 cout << "Resources Allocated: " << endl;
                 cout << "Trucks:       " << needTrucks << endl;
@@ -186,6 +217,7 @@ int main() {
                 cout << "Boats:        " << needBoats << endl;
                 cout << "Ambulances:   " << needAmbulances << endl;
                 cout << "Police:       " << needpolice << endl;
+                cout << "needscore     " << needscore << endl;
 
                 // Update remaining resources
                 trucks -= needTrucks;
@@ -224,6 +256,10 @@ int main() {
     cout << "Boats:      \t" << boats << endl;
     cout << "Ambulances: \t" << ambulances << endl;
     cout << "police: \t\n" << police << endl;
+
+    cout << "\n-----SUMMARY---------" << endl;
+    cout << "successful requests: \t" << successfulrequest << endl;
+    cout << "deferred requests: \t" << deferredrequest << endl;
     system("pause");
     return 0;
 }
