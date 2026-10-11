@@ -12,15 +12,15 @@ a need score, picks a relief action, checks whether enough resources are left, a
 --STARTING RESOURCES--
 |Resource      |	Sufficient	|Insufficient |
 |--------------|--------------|-------------|
-|Trucks        |    	5       |    	1       |
+|Trucks        |    	10      |    	1       |
 |Supply packs  |	  120       |    	10      |
 |Helicopters	 |      2	      |      1      |
 |Boats         |     	3	      |     0       |
 |Ambulances	   |      4       |     1       |
 |Police        |     	3       |    	1       |
 
-Any input other than sufficient starts the insufficient mode.
+
 
 --NEED SCORE CALCULATION--
 
-needScore = (2*damagelevel) + familiesaffected + (2*damagedroute) + (2*floodwarring) + medicalneed - previousAid
+needScore = (2*damagelevel) + familiesaffected + (damagedroute) + (2*floodwarring) + 2*medicalneed - previousAid
